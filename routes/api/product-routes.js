@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
       },
       {
         model: Tag,
-        as: "productTag_tag",
+        as: "product_tag",
         attributes: ["id", "tag_name"],
       },
     ],
@@ -40,7 +40,7 @@ router.get("/:id", (req, res) => {
       },
       {
         model: Tag,
-        as: "productTag_tag",
+        as: "product_tag",
         attributes: ["id", "tag_name"],
       },
     ],
@@ -132,30 +132,25 @@ router.delete("/:id", (req, res) => {
     where: {
       product_id: req.params.id,
     },
-  })
-    .then(() => {
-      // delete one product by its `id` value
-      Product.destroy({
-        where: {
-          id: req.params.id,
-        },
-      })
-        .then((dbPostData) => {
-          if (!dbPostData) {
-            res.status(404).json({ message: "No product found with this id" });
-            return;
-          }
-          res.json(dbPostData);
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json(err);
-        });
+  }).then(() => {
+    // delete one product by its `id` value
+    Product.destroy({
+      where: {
+        id: req.params.id,
+      },
     })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+      .then((dbPostData) => {
+        if (!dbPostData) {
+          res.status(404).json({ message: "No product found with this id" });
+          return;
+        }
+        res.json(dbPostData);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
 });
 
 module.exports = router;
