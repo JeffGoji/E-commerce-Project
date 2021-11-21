@@ -11,10 +11,11 @@ router.get("/", (req, res) => {
     include: [
       {
         model: Category,
+        attributes: ["id", "category_name"],
       },
       {
         model: Tag,
-        as: "product_tag",
+        // as: "products_tag",
         attributes: ["id", "tag_name"],
       },
     ],
@@ -26,7 +27,7 @@ router.get("/", (req, res) => {
     });
 });
 
-// get one product
+// Get one product
 router.get("/:id", (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
@@ -37,10 +38,11 @@ router.get("/:id", (req, res) => {
     include: [
       {
         model: Category,
+        attributes: ["id", "category_name"],
       },
       {
         model: Tag,
-        as: "product_tag",
+        as: "products_tag",
         attributes: ["id", "tag_name"],
       },
     ],
@@ -119,13 +121,17 @@ router.put("/:id", (req, res) => {
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
-    .then((updatedProductTags) => res.json(updatedProductTags))
+
+    .then((newProductTags) => res.json(newProductTags))
+
+    // .then((newProductTags) => res.json(newProductTags))
     .catch((err) => {
       // console.log(err);
       res.status(400).json(err);
     });
 });
 
+//Delete a tag:
 router.delete("/:id", (req, res) => {
   // delete associated product tags first
   ProductTag.destroy({

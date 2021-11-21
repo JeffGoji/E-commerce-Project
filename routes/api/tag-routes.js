@@ -10,8 +10,9 @@ router.get("/", (req, res) => {
     include: [
       {
         model: Product,
-        through: ProductTag,
-        as: "productTag_product",
+        attributes: ["id", "product_name", "price", "stock", "category_id"],
+        // through: ProductTag,
+        // as: "products",
       },
     ],
   })
@@ -32,8 +33,9 @@ router.get("/:id", (req, res) => {
     include: [
       {
         model: Product,
-        through: ProductTag,
-        as: "productTag_product",
+        attributes: ["id", "product_name", "price", "stock", "category_id"],
+        // through: ProductTag,
+        // as: "productTag_product",
       },
     ],
   }).then((tagData) => {
@@ -64,10 +66,9 @@ router.put("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-
     .then((tagData) => {
-      if (!tagData) {
-        res.status(500).json({ message: "No Tag Found!" });
+      if (!tagData[0]) {
+        res.status(404).json({ message: "No tag found!" });
         return;
       }
       res.json(tagData);
